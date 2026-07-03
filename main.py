@@ -14,21 +14,30 @@ calculated_emi = calculate_emi(
     term_months=loan.term_months,
 )
 
-print("Mortgage Optimizer")
-print("-" * 50)
+from src.amortization import generate_schedule
 
-print(f"Principal      : ₦{loan.principal:,.2f}")
-print(f"Annual Rate    : {loan.annual_rate:.2%}")
-print(f"Loan Term      : {loan.term_months} months")
-print(f"Bank EMI       : ₦{loan.emi:,.2f}")
-print(f"Calculated EMI : ₦{calculated_emi:,.2f}")
+schedule = generate_schedule(loan)
 
-difference = calculated_emi - loan.emi
+print()
 
-print(f"Difference     : ₦{difference:,.2f}")
-print("\nDebug Information")
-print("-" * 50)
+print("First 12 Payments")
 
-print(f"Monthly Rate : {loan.monthly_rate:.10f}")
+print("-" * 90)
 
-print(f"Total Months : {loan.term_months}")
+print(
+    f"{'M':<4}"
+    f"{'Opening':>15}"
+    f"{'Interest':>15}"
+    f"{'Principal':>15}"
+    f"{'Closing':>15}"
+)
+
+for payment in schedule[:12]:
+
+    print(
+        f"{payment.month:<4}"
+        f"{payment.opening_balance:>15,.2f}"
+        f"{payment.interest:>15,.2f}"
+        f"{payment.principal:>15,.2f}"
+        f"{payment.closing_balance:>15,.2f}"
+    )
