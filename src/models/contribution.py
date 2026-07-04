@@ -1,23 +1,15 @@
-from src.models.contribution import Contribution
+from dataclasses import dataclass
 
 
-def get_contribution(month: int) -> Contribution:
+@dataclass
+class Contribution:
+    """
+    Represents the monthly contribution from all income sources.
+    """
 
-    if month <= 36:
+    ceiling: float
+    salary: float
 
-        return Contribution(
-            ceiling=45000,
-            salary=24845
-        )
-
-    elif month <= 72:
-
-        return Contribution(
-            ceiling=80000,
-            salary=40000
-        )
-
-    return Contribution(
-        ceiling=80000,
-        salary=50000
-    )
+    @property
+    def total(self) -> float:
+        return self.ceiling + self.salary
