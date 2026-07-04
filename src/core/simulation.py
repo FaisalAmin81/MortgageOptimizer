@@ -1,6 +1,6 @@
 from calendar import month
 from multiprocessing import context
-
+from src.models.simulation_result import SimulationResult
 from src.core.amortization import AmortizationEngine
 from src.models.monthly_snapshot import MonthlySnapshot
 from src.models.mortgage_context import MortgageContext
@@ -24,7 +24,7 @@ class SimulationEngine:
     @staticmethod
     def run(
         context: MortgageContext,
-    ) -> list[Payment]:
+    ) -> SimulationResult:
 
         schedule: list[Payment] = []
         policy = OptimizationPolicy()
@@ -74,4 +74,11 @@ class SimulationEngine:
                     for month in context.monthly_snapshots:
                         print(month)
 
-        return schedule
+        return SimulationResult(
+            loan=context.loan,
+            final_state=context.state,
+            payments=schedule,
+            snapshots=context.monthly_snapshots,
+            savings=context.savings,
+            settlement_history=context.settlement_history,
+        )

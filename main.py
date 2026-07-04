@@ -44,7 +44,7 @@ def main() -> None:
     # Run simulation
     # -------------------------------------------------
 
-    schedule = SimulationEngine.run(context)
+    result = SimulationEngine.run(context)
 
     # -------------------------------------------------
     # Summary
@@ -107,6 +107,12 @@ def main() -> None:
 
     for snapshot in context.monthly_snapshots[-5:]:
         print(snapshot)
+
+    print(result.months)
+
+    print(result.total_interest)
+
+    print(result.settlements)
 
 
 if __name__ == "__main__":
