@@ -1,47 +1,36 @@
 from src.core.emi import EMIEngine
-from src.models.loan import Loan
-from src.models.loan_state import LoanState
-from src.models.savings import Savings
-from src.models.settlement import Settlement
-from src.models.settlement_history import SettlementHistory
-from src.models.settlement_rule import SettlementRule
-from src.services.savings_service import SavingsService
 from src.models.mortgage_context import MortgageContext
-
+from src.models.settlement import Settlement
+from src.services.savings_service import SavingsService
 
 
 class SettlementService:
+    """
+    Executes a mortgage settlement.
+    """
 
     @staticmethod
     def apply(
-        context: MortgageContext
-    )-> bool:
-        loan = context.loan
+        context: MortgageContext,
+    ) -> bool:
+
         state = context.state
+        loan = context.loan
         savings = context.savings
-        history = context.settlement_history
         rule = context.settlement_rule
-
-         
-        """
-        Apply a settlement if savings meet the minimum requirement.
-
-        Returns:
-            True if a settlement was applied.
-            False otherwise.
-        """
-
-        # Not enough savings
-        if savings.balance < rule.minimum_amount:
-            return False
+        history = context.settlement_history
 
         settlement_amount = savings.balance
+
+        # Nothing to settle
+        if settlement_amount <= 0:
+            return False
 
         # Store values before settlement
         balance_before = state.balance
         emi_before = state.current_emi
 
-        # Withdraw from savings
+        # Withdraw all savings
         SavingsService.withdraw(
             savings=savings,
             month=state.current_month,
@@ -63,13 +52,15 @@ class SettlementService:
                 annual_rate=loan.annual_rate,
                 months=state.remaining_months,
             )
+
         else:
+
             state.current_emi = 0
 
         balance_after = state.balance
         emi_after = state.current_emi
 
-        # Record settlement
+        # Save settlement history
         history.settlements.append(
             Settlement(
                 number=history.count + 1,

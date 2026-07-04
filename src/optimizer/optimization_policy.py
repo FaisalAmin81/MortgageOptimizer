@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class OptimizationConfig:
+class OptimizationPolicy:
     """
     Controls how the optimizer searches for the best mortgage strategy.
     """

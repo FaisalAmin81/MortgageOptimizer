@@ -5,6 +5,9 @@ from src.models.settlement import Settlement
 
 @dataclass
 class SettlementHistory:
+    """
+    Stores every settlement made during the simulation.
+    """
 
     settlements: list[Settlement] = field(default_factory=list)
 
@@ -13,5 +16,7 @@ class SettlementHistory:
         return len(self.settlements)
 
     @property
-    def total_amount(self) -> float:
-        return sum(s.amount for s in self.settlements)
+    def last(self) -> Settlement | None:
+        if not self.settlements:
+            return None
+        return self.settlements[-1]

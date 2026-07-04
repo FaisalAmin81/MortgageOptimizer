@@ -1,11 +1,14 @@
 from dataclasses import dataclass
-
+from dataclasses import field
+from src.models.monthly_snapshot import MonthlySnapshot
 from src.models.currency import Currency
 from src.models.loan import Loan
 from src.models.loan_state import LoanState
 from src.models.savings import Savings
 from src.models.settlement_history import SettlementHistory
 from src.models.settlement_rule import SettlementRule
+
+monthly_snapshots: list[MonthlySnapshot] = field(default_factory=list)
 
 
 @dataclass
@@ -20,6 +23,7 @@ class MortgageContext:
     settlement_history: SettlementHistory
     settlement_rule: SettlementRule
     currency: Currency
+    monthly_snapshots: list[MonthlySnapshot] = field(default_factory=list)
 
     @classmethod
     def create(
@@ -35,4 +39,5 @@ class MortgageContext:
             settlement_history=SettlementHistory(),
             settlement_rule=settlement_rule,
             currency=currency,
+            monthly_snapshots=[],
         )
