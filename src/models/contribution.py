@@ -1,4 +1,4 @@
-from src.models import Contribution
+from src.models.contribution import Contribution
 
 
 def get_contribution(month: int) -> Contribution:

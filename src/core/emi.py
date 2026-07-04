@@ -1,39 +1,31 @@
-"""
-EMI calculation module.
-
-This module contains functions for calculating the fixed monthly
-payment (EMI) for an amortizing loan.
-"""
-
 from math import pow
 
 
-def calculate_emi(
-    principal: float,
-    annual_rate: float,
-    term_months: int
-) -> float:
+class EMIEngine:
     """
-    Calculate the Equated Monthly Installment (EMI).
-
-    Args:
-        principal: Loan amount.
-        annual_rate: Annual interest rate (e.g. 0.05 for 5%).
-        term_months: Total repayment period in months.
-
-    Returns:
-        Monthly EMI as a float.
+    Calculates EMI for a loan.
     """
 
-    monthly_rate = annual_rate / 12
+    @staticmethod
+    def calculate(
+        principal: float,
+        annual_rate: float,
+        months: int,
+    ) -> float:
 
-    factor = pow(1 + monthly_rate, term_months)
+        if principal <= 0:
+            return 0.0
 
-    emi = (
-        principal
-        * monthly_rate
-        * factor
-        / (factor - 1)
-    )
+        monthly_rate = annual_rate / 12
 
-    return emi
+        if monthly_rate == 0:
+            return principal / months
+
+        factor = pow(1 + monthly_rate, months)
+
+        return (
+            principal
+            * monthly_rate
+            * factor
+            / (factor - 1)
+        )

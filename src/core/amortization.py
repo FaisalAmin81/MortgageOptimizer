@@ -1,39 +1,53 @@
-from src.models import Payment
+from src.core.monthly_interest import MonthlyInterestEngine
+from src.models.loan import Loan
+from src.models.loan_state import LoanState
+from src.models.payment import Payment
 
 
-def generate_schedule(loan):
+class AmortizationEngine:
+    """
+    Processes exactly ONE month of the loan.
+    """
 
-    schedule = []
+    @staticmethod
+    def process_month(
+        state: LoanState,
+        loan: Loan,
+    ) -> Payment:
 
-    balance = loan.principal
+        opening_balance = state.balance
 
-    for month in range(1, loan.term_months + 1):
+        interest = MonthlyInterestEngine.calculate(
+            balance=opening_balance,
+            annual_rate=loan.annual_rate,
+        )
 
-        opening_balance = balance
+        principal = state.current_emi - interest
 
-        interest = loan.monthly_interest(opening_balance)
-
-        principal = loan.emi - interest
+        # Prevent overpayment in final month
+        if principal > opening_balance:
+            principal = opening_balance
+            emi = interest + principal
+        else:
+            emi = state.current_emi
 
         closing_balance = opening_balance - principal
 
-        if closing_balance < 0:
-            closing_balance = 0
-
         payment = Payment(
-            month=month,
+            month=state.current_month + 1,
             opening_balance=opening_balance,
-            emi=loan.emi,
+            emi=emi,
             interest=interest,
             principal=principal,
-            closing_balance=closing_balance
+            closing_balance=closing_balance,
         )
 
-        schedule.append(payment)
+        # Update loan state
+        state.balance = closing_balance
+        state.current_month += 1
+        state.remaining_months -= 1
+        state.total_interest_paid += interest
+        state.total_principal_paid += principal
+        state.current_emi = emi
 
-        balance = closing_balance
-
-        if balance == 0:
-            break
-
-    return schedule
+        return payment

@@ -1,0 +1,10 @@
+2026-07-04 14:36:23,285 | INFO | MortgageOptimizer | Loan created
+2026-07-04 14:36:23,287 | WARNING | MortgageOptimizer | Savings below minimum settlement
+2026-07-04 14:36:23,287 | ERROR | MortgageOptimizer | Negative balance detected
+2026-07-04 18:20:10,550 | INFO | MortgageOptimizer | Deposit | Month=48 | Description=Accumulated Savings | Amount=650000.00 | Balance=650000.00
+2026-07-04 18:20:10,551 | INFO | MortgageOptimizer | Withdrawal | Month=0 | Description=Mortgage Settlement | Amount=650000.00 | Balance=0.00
+2026-07-04 18:47:18,838 | INFO | MortgageOptimizer | Deposit | Month=48 | Description=Accumulated Savings | Amount=650000.00 | Balance=650000.00
+2026-07-04 18:47:55,822 | INFO | MortgageOptimizer | Deposit | Month=48 | Description=Accumulated Savings | Amount=650000.00 | Balance=650000.00
+2026-07-04 18:48:10,153 | INFO | MortgageOptimizer | Deposit | Month=48 | Description=Accumulated Savings | Amount=650000.00 | Balance=650000.00
+2026-07-04 18:52:01,755 | INFO | MortgageOptimizer | Deposit | Month=48 | Description=Accumulated Savings | Amount=650000.00 | Balance=650000.00
+2026-07-04 18:52:01,756 | INFO | MortgageOptimizer | Withdrawal | Month=0 | Description=Mortgage Settlement | Amount=650000.00 | Balance=0.00
