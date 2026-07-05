@@ -25,19 +25,3 @@ class SimulationResult:
     savings: Savings
 
     settlement_history: SettlementHistory
-
-    @property
-    def months(self) -> int:
-        return len(self.payments)
-
-    @property
-    def total_interest(self) -> float:
-        return self.final_state.total_interest_paid
-
-    @property
-    def total_principal(self) -> float:
-        return self.final_state.total_principal_paid
-
-    @property
-    def settlements(self) -> int:
-        return self.settlement_history.count

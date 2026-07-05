@@ -1,8 +1,13 @@
+# from unittest import result
+
+
 from src.config.app_config import AppConfig
 from src.core.simulation import SimulationEngine
 from src.models.loan import Loan
 from src.models.mortgage_context import MortgageContext
 from src.models.settlement_rule import SettlementRule
+from src.services.statistics_service import StatisticsService
+from src.exporters.excel_exporter import ExcelExporter
 
 
 def main() -> None:
@@ -39,6 +44,9 @@ def main() -> None:
         currency=AppConfig.DEFAULT_CURRENCY,
         settlement_rule=settlement_rule,
     )
+    print(context)
+    print(type(context))
+    print(hasattr(context, "monthly_snapshots"))
 
     # -------------------------------------------------
     # Run simulation
@@ -53,8 +61,6 @@ def main() -> None:
     print("\n" + "=" * 60)
     print("MORTGAGE SIMULATION SUMMARY")
     print("=" * 60)
-
-    print(f"Months simulated        : {len(schedule)}")
     print(f"Settlements executed    : {context.settlement_history.count}")
     print(f"Loan balance            : {context.state.balance:,.2f}")
     print(f"Current EMI             : {context.state.current_emi:,.2f}")
@@ -108,11 +114,19 @@ def main() -> None:
     for snapshot in context.monthly_snapshots[-5:]:
         print(snapshot)
 
-    print(result.months)
+    print(result.snapshots)
 
-    print(result.total_interest)
+    print(result.settlement_history)
 
-    print(result.settlements)
+    print(result.savings)
+
+    print(StatisticsService.total_interest(result))
+
+    print(StatisticsService.total_months(result))
+
+    print(StatisticsService.total_settlements(result))
+
+    ExcelExporter.export(result)
 
 
 if __name__ == "__main__":
